@@ -74,7 +74,20 @@ textarea{
 <input id="precio">
 
 <label>Imagen</label>
-<input id="imagen" placeholder="va.jpeg">
+<input
+id="imagen"
+placeholder="va.jpeg"
+oninput="preview()">
+
+<br><br>
+
+<img
+id="preview"
+style="
+max-width:250px;
+border-radius:10px;
+display:none;
+">
 
 <button onclick="agregar()">
 Agregar Producto
