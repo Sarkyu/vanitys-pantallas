@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "Tocador Vanity Premium",
+    "precio": "$3,499",
+    "imagen": "va.jpeg"
+  },
+  {
+    "nombre": "Vanity 80 cm",
+    "precio": "$4,299",
+    "imagen": "va80.jpeg"
+  },
+  {
+    "nombre": "Vanity Organizador",
+    "precio": "$4,599",
+    "imagen": "va80abierto.jpeg"
+  },
+  {
+    "nombre": "Vanity Frente LED",
+    "precio": "$4,999",
+    "imagen": "va80frente.jpeg"
+  }
+]
