@@ -121,6 +121,19 @@ Generar JSON
 
 let productos=[];
 
+function preview(){
+
+const archivo =
+document.getElementById('imagen').value;
+
+const img =
+document.getElementById('preview');
+
+img.src = archivo;
+img.style.display="block";
+
+}
+    
 function agregar(){
 
 const producto = {
