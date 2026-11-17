@@ -94,9 +94,8 @@ box-shadow:0 3px 15px rgba(0,0,0,.12);
 }
 
 .card img{
-width:55%;
-object-fit:contain;
-background:white;
+  width:70%;
+  object-fit:cover;
 }
 
 .info{
@@ -169,6 +168,8 @@ Vanitys Boutique Coapa
 <div>
 Catálogo Digital
 </div>
+
+<div id="ultimaActualizacion"></div>
 
 </div>
 
@@ -539,6 +540,12 @@ document
 pausado ? '▶' : '⏸';
 
 }
+
+document.getElementById(
+ 'ultimaActualizacion'
+).textContent =
+'Actualizado: ' +
+new Date().toLocaleString('es-MX');
 
 </script>
 
