@@ -123,7 +123,24 @@ width:75px;
     color:#666;
     line-height:1.4;
 }
+    
+.color-badge{
 
+display:inline-block;
+
+margin-right:6px;
+margin-bottom:4px;
+
+padding:4px 8px;
+
+background:#f3f3f3;
+
+border-radius:12px;
+
+font-size:14px;
+
+}
+    
 .stock{
     font-size:24px;
     font-weight:700;
@@ -347,14 +364,33 @@ stockRows.reduce(
 0
 );
 
-const colores =
-[
-...new Set(
-stockRows.map(x =>
-(x.Color || '').trim()
-)
-)
-];
+const colores = stockRows.map(row => {
+
+const cantidad =
+Number(row.Stock_Actual || 0);
+
+let icono = "🔴";
+
+if(cantidad > 2){
+
+icono = "🟢";
+
+}
+else if(cantidad > 0){
+
+icono = "🟡";
+
+}
+
+return {
+
+color:(row.Color || '').trim(),
+icono:icono,
+cantidad:cantidad
+
+};
+
+});
 
 productos.push({
 
@@ -526,7 +562,15 @@ ${p.precio}
 </div>
 
 <div class="colores">
-${p.colores.join(' • ')}
+
+${p.colores.map(c =>
+
+`<span class="color-badge">
+${c.icono} ${c.color}
+</span>`
+
+).join('')}
+
 </div>
 
 <div class="stock ${p.stock.clase}">
