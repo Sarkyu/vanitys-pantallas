@@ -77,12 +77,10 @@ width:75px;
 }
 
 #productos{
-    padding:12px;
     display:grid;
     grid-template-columns:1fr 1fr;
     grid-template-rows:1fr 1fr;
     gap:12px;
-    height:calc(100vh - 215px);
 }
 
 .card{
@@ -143,13 +141,13 @@ font-size:14px;
 
 .leyenda-stock{
 
-font-size:11px;
+    margin-top:10px;
 
-color:#777;
+    font-size:12px;
 
-margin-top:6px;
+    color:#666;
 
-line-height:1.3;
+    line-height:1.4;
 
 }
     
@@ -197,27 +195,29 @@ footer{
 
 @media (max-width:768px){
 
-    header{
-        flex-direction:column;
-        gap:10px;
-        height:auto;
-        padding:15px;
-    }
+    #productos{
 
-    .logo{
-        font-size:28px;
+        grid-template-columns:1fr;
+
+        grid-template-rows:auto;
+
+        height:auto;
+
     }
 
     .card{
-        grid-template-columns:1fr;
+
+        flex-direction:column;
+
     }
 
     .card img{
-        height:300px;
-    }
 
-    .precio{
-        font-size:42px;
+        width:100%;
+        height:320px;
+
+        object-fit:contain;
+
     }
 
 }
@@ -649,6 +649,12 @@ document.getElementById(
 ).textContent =
 'Actualizado: ' +
 new Date().toLocaleString('es-MX');
+
+setInterval(() => {
+
+    location.reload();
+
+}, 300000);
 
 </script>
 
