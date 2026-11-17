@@ -101,13 +101,15 @@ width:75px;
     padding:20px;
     display:flex;
     flex-direction:column;
-    justify-content:center;
+    justify-content:flex-start;
+    gap:12px;
 }
 
 .nombre{
     font-size:30px;
     font-weight:800;
     color:#111;
+    margin-top:10px;
 }
 
 .precio{
@@ -140,17 +142,40 @@ font-size:14px;
 }
 
 .leyenda-stock{
-
-    margin-top:8px;
-
+    margin-top:4px;
     font-size:11px;
-
     color:#777;
+}
 
-    line-height:1.2;
+.leyenda-global{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:16px;
+
+    margin-top:6px;
+
+    font-size:13px;
+
+    color:#666;
 
 }
 
+.estado{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+}
+
+    
 .verde{
 color:#2e7d32;
 }
@@ -243,6 +268,22 @@ Catálogo Digital
 <select id="selectorCategoria">
 <option value="TODOS">Todos</option>
 </select>
+
+<div class="leyenda-global">
+
+<span class="estado disponible">
+🟢 Disponible
+</span>
+
+<span class="estado ultimas">
+🟡 Últimas piezas
+</span>
+
+<span class="estado pedido">
+🔴 Bajo pedido
+</span>
+
+</div>
 
 <button onclick="anterior()">◀</button>
 
@@ -579,13 +620,6 @@ ${c.icono} ${c.color}
 ).join('')}
 
 </div>
-
-<div class="leyenda-stock">
-🟢 Disponible &nbsp;&nbsp;
-🟡 Últimas piezas &nbsp;&nbsp;
-🔴 Bajo pedido
-</div>
-
 
 
 </div>
