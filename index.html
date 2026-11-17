@@ -67,55 +67,72 @@ width:75px;
 }
 
 .categoria{
-    height:45px;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    font-weight:900;
+    color:#c2185b;
 }
 
 #productos{
     padding:10px;
-    gap:10px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:12px;
+    height:calc(100vh - 215px);
 }
 
 .card{
+    background:white;
     display:grid;
-    grid-template-columns:55% 45%;
+    grid-template-columns:58% 42%;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 3px 15px rgba(0,0,0,.12);
 }
 
 .card img{
     width:100%;
     height:100%;
     object-fit:contain;
+    background:white;
+    padding:8px;
 }
 
 .info{
-    padding:15px;
+    padding:18px;
     display:flex;
     flex-direction:column;
     justify-content:center;
-    gap:10px;
+    gap:8px;
 }
 
 .nombre{
-font-size:28px;
-font-weight:800;
+    font-size:30px;
+    font-weight:800;
+    color:#111;
 }
 
 .precio{
-margin-top:10px;
-font-size:54px;
-font-weight:900;
-color:#e53935;
+    font-size:58px;
+    font-weight:900;
+    color:#e53935;
+    line-height:1;
 }
 
 .colores{
-margin-top:10px;
-color:#666;
-font-size:18px;
+    font-size:16px;
+    color:#666;
+    line-height:1.3;
 }
 
 .stock{
-margin-top:12px;
-font-size:24px;
-font-weight:bold;
+    font-size:24px;
+    font-weight:700;
+    margin-top:4px;
 }
 
 .verde{
@@ -131,14 +148,55 @@ color:#c62828;
 }
 
 footer{
-height:60px;
-background:#c2185b;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:20px;
-font-weight:700;
+    height:45px;
+    background:#c2185b;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    font-weight:700;
+}
+
+@media (max-width:1024px){
+
+    #productos{
+        grid-template-columns:1fr;
+        grid-template-rows:auto;
+        height:auto;
+    }
+
+    .card{
+        min-height:320px;
+    }
+
+}
+
+@media (max-width:768px){
+
+    header{
+        flex-direction:column;
+        gap:10px;
+        height:auto;
+        padding:15px;
+    }
+
+    .logo{
+        font-size:28px;
+    }
+
+    .card{
+        grid-template-columns:1fr;
+    }
+
+    .card img{
+        height:300px;
+    }
+
+    .precio{
+        font-size:42px;
+    }
+
 }
 
 </style>
