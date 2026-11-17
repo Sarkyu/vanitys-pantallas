@@ -23,13 +23,12 @@ overflow:hidden;
 }
 
 header{
-height:110px;
-background:white;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 30px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
+    min-height:110px;
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 30px;
 }
 
 .logo{
@@ -77,10 +76,12 @@ width:75px;
 }
 
 #productos{
+    padding:12px;
     display:grid;
     grid-template-columns:1fr 1fr;
     grid-template-rows:1fr 1fr;
     gap:12px;
+    height:calc(100vh - 200px);
 }
 
 .card{
@@ -148,21 +149,12 @@ font-size:14px;
 }
 
 .leyenda-global{
-
     display:flex;
-
-    justify-content:center;
-
     align-items:center;
-
-    gap:16px;
-
-    margin-top:6px;
-
-    font-size:13px;
-
+    gap:10px;
+    font-size:11px;
     color:#666;
-
+    white-space:nowrap;
 }
 
 .estado{
@@ -270,19 +262,9 @@ Catálogo Digital
 </select>
 
 <div class="leyenda-global">
-
-<span class="estado disponible">
 🟢 Disponible
-</span>
-
-<span class="estado ultimas">
-🟡 Últimas piezas
-</span>
-
-<span class="estado pedido">
-🔴 Bajo pedido
-</span>
-
+🟡 Últimas
+🔴 Pedido
 </div>
 
 <button onclick="anterior()">◀</button>
