@@ -3,685 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Vanitys Boutique Coapa</title>
-
+<title>Darvina Home</title>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,Arial,sans-serif;
-}
-
-body{
-    background:#f5d9e5;
-    overflow-x:hidden;
-}
-
-
-header{
-    min-height:110px;
-    background:white;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 30px;
-}
-
-.logo{
-font-size:42px;
-font-weight:900;
-color:#c2185b;
-}
-
-.top-controls{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-select,
-button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-size:15px;
-}
-
-button{
-background:#c2185b;
-color:white;
-}
-
-select{
-background:#f4f4f4;
-}
-
-.qr img{
-width:75px;
-}
-
-.categoria{
-    height:45px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
-    font-weight:900;
-    color:#c2185b;
-}
-
-#productos{
-    padding:12px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:1fr 1fr;
-    gap:12px;
-    height:calc(100vh - 200px);
-}
-
-.card{
-    background:white;
-    display:flex;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 3px 15px rgba(0,0,0,.12);
-}
-
-.card img{
-    width:65%;
-    object-fit:contain;
-    background:white;
-}
-
-.info{
-    padding:20px;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
-    gap:12px;
-}
-
-.nombre{
-    font-size:30px;
-    font-weight:800;
-    color:#111;
-    margin-top:10px;
-}
-
-.precio{
-    font-size:54px;
-    font-weight:900;
-    color:#e53935;
-}
-
-.colores{
-    font-size:17px;
-    color:#666;
-    line-height:1.4;
-}
-    
-.color-badge{
-
-display:inline-block;
-
-margin-right:6px;
-margin-bottom:4px;
-
-padding:4px 8px;
-
-background:#f3f3f3;
-
-border-radius:12px;
-
-font-size:14px;
-
-}
-
-.leyenda-stock{
-    margin-top:4px;
-    font-size:11px;
-    color:#777;
-}
-
-.leyenda-global{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:11px;
-    color:#666;
-    white-space:nowrap;
-}
-
-.estado{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:4px;
-
-}
-
-    
-.verde{
-color:#2e7d32;
-}
-
-.amarillo{
-color:#ef6c00;
-}
-
-.rojo{
-color:#c62828;
-}
-
-footer{
-    height:45px;
-    background:#c2185b;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-    font-weight:700;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif;}
+body{background:#f5d9e5;overflow-x:hidden;}
+header{min-height:110px;background:white;display:flex;justify-content:space-between;align-items:center;padding:10px 30px;}
+.logo{font-size:42px;font-weight:900;color:#c2185b;}
+#estado{font-size:13px;color:#777;margin-top:2px;}
+#estado.offline{color:#c62828;font-weight:700;}
+.top-controls{display:flex;align-items:center;gap:10px;}
+select,button{padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-size:15px;}
+button{background:#c2185b;color:white;}
+select{background:#f4f4f4;}
+.qr img{width:75px;}
+.categoria{height:45px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#c2185b;}
+#productos{padding:12px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;height:calc(100vh - 200px);}
+.card{background:white;display:flex;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.12);}
+.card img{width:65%;object-fit:contain;background:white;}
+.info{padding:20px;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;}
+.nombre{font-size:30px;font-weight:800;color:#111;margin-top:10px;}
+.precio{font-size:54px;font-weight:900;color:#e53935;}
+.colores{line-height:1.4;}
+.color-badge{display:inline-block;margin-right:6px;margin-bottom:4px;padding:4px 8px;background:#f3f3f3;border-radius:12px;font-size:14px;color:#666;}
+.leyenda-global{display:flex;align-items:center;gap:10px;font-size:11px;color:#666;white-space:nowrap;}
+.vacio{grid-column:1/-1;display:flex;align-items:center;justify-content:center;font-size:24px;color:#999;}
+footer{height:45px;background:#c2185b;color:white;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;}
 @media (max-width:1024px){
-
-    #productos{
-        grid-template-columns:1fr;
-        grid-template-rows:auto;
-        height:auto;
-    }
-
-    .card{
-        min-height:320px;
-    }
-
+#productos{grid-template-columns:1fr;grid-template-rows:auto;height:auto;}
+.card{min-height:320px;}
 }
-
 @media (max-width:768px){
-
-    body{
-        overflow-y:auto;
-    }
-
-    header{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:10px;
-        height:auto;
-    }
-
-    .top-controls{
-        width:100%;
-        flex-wrap:wrap;
-    }
-
-    .qr{
-        display:none;
-    }
-
-    #productos{
-        grid-template-columns:1fr;
-        grid-template-rows:auto;
-        height:auto;
-        min-height:auto;
-    }
-
-    .card{
-        flex-direction:column;
-    }
-
-    .card img{
-        width:100%;
-        height:320px;
-        object-fit:contain;
-    }
-
-    footer{
-        position:relative;
-    }
-
+body{overflow-y:auto;}
+header{flex-direction:column;align-items:flex-start;gap:10px;height:auto;}
+.top-controls{width:100%;flex-wrap:wrap;}
+.qr{display:none;}
+.card{flex-direction:column;}
+.card img{width:100%;height:320px;}
+footer{position:relative;}
 }
-
 </style>
 </head>
-
 <body>
 
 <header>
+  <div>
+    <div class="logo">Vanitys Boutique Coapa</div>
+    <div>Catálogo Digital</div>
+    <div id="estado"></div>
+  </div>
 
-<div>
+  <div class="top-controls">
+    <select id="selectorCategoria"></select>
+    <div class="leyenda-global">🟢 Disponible &nbsp; 🟡 Últimas &nbsp; 🔴 Pedido</div>
+    <button onclick="ir(-1)">◀</button>
+    <button onclick="togglePausa()" id="btnPausa">⏸</button>
+    <button onclick="ir(1)">▶</button>
+  </div>
 
-<div class="logo">
-Vanitys Boutique Coapa
-</div>
-
-<div>
-Catálogo Digital
-</div>
-
-<div id="ultimaActualizacion"></div>
-
-</div>
-
-<div class="top-controls">
-
-<select id="selectorCategoria">
-<option value="TODOS">Todos</option>
-</select>
-
-<div class="leyenda-global">
-🟢 Disponible
-🟡 Últimas
-🔴 Pedido
-</div>
-
-<button onclick="anterior()">◀</button>
-
-<button onclick="togglePausa()" id="btnPausa">
-⏸
-</button>
-
-<button onclick="siguiente()">▶</button>
-
-</div>
-
-<div class="qr">
-
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/525581582869">
-
-</div>
-
+  <div class="qr">
+    <img alt="WhatsApp" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/525581582869" onerror="this.style.display='none'">
+  </div>
 </header>
 
-<div class="categoria" id="titulo">
-Cargando catálogo...
-</div>
-
+<div class="categoria" id="titulo">Cargando catálogo...</div>
 <div id="productos"></div>
 
-<footer>
-
-Cotiza por WhatsApp • Entregas CDMX y Área Metropolitana • Cobertura sujeta a ubicación
-
-</footer>
+<footer>Cotiza por WhatsApp • Entregas CDMX y Área Metropolitana • Cobertura sujeta a ubicación</footer>
 
 <script>
+const CSV_CATALOGO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR5osDmFVFiv5UoIcoUZwPa9kveX_VBQRGKaVq0EAbgAkMN4E8zFiqGWCB15kJt9cYZ3U9baZoRJsG/pub?gid=1715278299&single=true&output=csv";
+const CSV_INVENTARIO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR5osDmFVFiv5UoIcoUZwPa9kveX_VBQRGKaVq0EAbgAkMN4E8zFiqGWCB15kJt9cYZ3U9baZoRJsG/pub?gid=2081535030&single=true&output=csv";
+const BASE_IMG = "https://sarkyu.github.io/vanitys-pantallas/img/";
 
-const CSV_CATALOGO =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQR5osDmFVFiv5UoIcoUZwPa9kveX_VBQRGKaVq0EAbgAkMN4E8zFiqGWCB15kJt9cYZ3U9baZoRJsG/pub?gid=1715278299&single=true&output=csv";
+const POR_PAGINA = 4;
+const ROTAR_MS = 15000;
+const REFRESCAR_MS = 300000;   // 5 min
+const REINTENTO_MS = 30000;    // 30 s si falla
+const CACHE_KEY = 'vanitys_cache_v1';
 
-const CSV_INVENTARIO =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQR5osDmFVFiv5UoIcoUZwPa9kveX_VBQRGKaVq0EAbgAkMN4E8zFiqGWCB15kJt9cYZ3U9baZoRJsG/pub?gid=2081535030&single=true&output=csv";
+const PH = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#f3f3f3"/><text x="50%" y="50%" fill="#bbb" font-size="24" text-anchor="middle" font-family="Arial">Sin imagen</text></svg>'
+);
 
-const BASE_IMG =
-"https://sarkyu.github.io/vanitys-pantallas/img/";
-
-let categorias = [];
-let categoriaIndex = 0;
+let paginas = [];
+let idx = 0;
 let pausado = false;
-let timer;
+let timer = null;
+let ultimaOk = null;
+
+const $ = id => document.getElementById(id);
+
+const esc = t => String(t == null ? '' : t)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// compara sin importar mayúsculas, acentos ni espacios extra
+const norm = s => String(s || '').trim().toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+function fmtPrecio(p){
+  const n = Number(String(p || '').replace(/[^0-9.]/g,''));
+  if(!isFinite(n) || n <= 0){ return esc(p || ''); }
+  return n.toLocaleString('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
+}
 
 function cargarCSV(url){
+  return new Promise((resolve, reject) => {
+    Papa.parse(url + '&t=' + Date.now(), {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: e => reject(e)
+    });
+  });
+}
 
-return new Promise((resolve,reject)=>{
+// ===== Construcción de datos =====
 
-Papa.parse(url,{
+function construir(catalogo, inventario){
 
-download:true,
-header:true,
-skipEmptyLines:true,
+  const inv = new Map();
 
-complete:(r)=>resolve(r.data),
+  inventario.forEach(r => {
+    const k = norm(r.Producto);
+    if(!k){ return; }
+    if(!inv.has(k)){ inv.set(k, []); }
+    inv.get(k).push(r);
+  });
 
-error:(e)=>reject(e)
+  const productos = [];
 
-});
+  catalogo.forEach(item => {
 
-});
+    if((item.Mostrar_TV || '').trim().toUpperCase() !== 'SI'){ return; }
+
+    const nombre = (item.Producto || '').trim();
+    if(!nombre){ return; }
+
+    const minimo = Number(item.Stock_Minimo) || 0;
+
+    // agrupa por color y suma todas las ubicaciones
+    const porColor = new Map();
+
+    (inv.get(norm(nombre)) || []).forEach(r => {
+      const label = (r.Color || '').trim();
+      const k = norm(label) || 'sin color';
+      const c = porColor.get(k) || { color: label || 'Sin color', cantidad: 0 };
+      c.cantidad += Number(r.Stock_Actual) || 0;
+      porColor.set(k, c);
+    });
+
+    let colores = [...porColor.values()].map(c => ({
+      color: c.color,
+      icono: c.cantidad <= 0 ? '🔴' : (c.cantidad <= minimo ? '🟡' : '🟢')
+    }));
+
+    // respaldo: si no hay inventario, usa "Colores TV" del catálogo
+    if(!colores.length && item.Colores_TV){
+      colores = String(item.Colores_TV).split(',')
+        .map(s => s.trim()).filter(Boolean)
+        .map(c => ({ color: c, icono: '🔴' }));
+    }
+
+    productos.push({
+      nombre: nombre,
+      categoria: (item.Categoria || '').trim() || 'Otros',
+      precio: fmtPrecio(item.Precio_Unitario),
+      imagen: (item.Imagen || '').trim(),
+      orden: Number(item.Orden_TV) || 9999,   // sin orden → al final
+      destacado: (item.Destacado || '').trim().toUpperCase() === 'SI',
+      colores: colores
+    });
+
+  });
+
+  productos.sort((a,b) => a.orden - b.orden || a.nombre.localeCompare(b.nombre));
+
+  const grupos = [];
+  const dest = productos.filter(p => p.destacado);
+
+  if(dest.length){
+    grupos.push({ key:'__DEST__', nombre:'⭐ DESTACADOS', items:dest });
+  }
+
+  [...new Set(productos.map(p => p.categoria))].forEach(cat => {
+    grupos.push({ key:cat, nombre:cat, items:productos.filter(p => p.categoria === cat) });
+  });
+
+  // cada grupo se parte en páginas de 4
+  const pags = [];
+
+  grupos.forEach(g => {
+    const total = Math.ceil(g.items.length / POR_PAGINA);
+    for(let i = 0; i < total; i++){
+      pags.push({
+        key: g.key,
+        nombre: g.nombre,
+        pag: i + 1,
+        total: total,
+        items: g.items.slice(i * POR_PAGINA, (i + 1) * POR_PAGINA)
+      });
+    }
+  });
+
+  return pags;
 
 }
 
-function estadoStock(stock,minimo){
+function aplicar(catalogo, inventario){
 
-stock = Number(stock);
-minimo = Number(minimo);
+  const actual = paginas[idx];
 
-if(stock <= 0){
+  paginas = construir(catalogo, inventario);
 
-return {
-texto:"🔴 Bajo pedido",
-clase:"rojo"
-};
+  // conserva la posición actual tras refrescar
+  idx = 0;
+  if(actual){
+    const i = paginas.findIndex(p => p.key === actual.key && p.pag === actual.pag);
+    if(i >= 0){ idx = i; }
+  }
 
-}
+  // selector
+  const sel = $('selectorCategoria');
+  sel.innerHTML = '';
+  const vistos = new Set();
 
-if(stock <= minimo){
+  paginas.forEach(p => {
+    if(vistos.has(p.key)){ return; }
+    vistos.add(p.key);
+    const o = document.createElement('option');
+    o.value = p.key;
+    o.textContent = p.nombre;
+    sel.appendChild(o);
+  });
 
-return {
-texto:"🟡 Últimas piezas",
-clase:"amarillo"
-};
-
-}
-
-return {
-texto:"🟢 Disponible",
-clase:"verde"
-};
-
-}
-
-Promise.all([
-cargarCSV(CSV_CATALOGO),
-cargarCSV(CSV_INVENTARIO)
-])
-
-.then(([catalogo,inventario])=>{
-
-const productos=[];
-
-catalogo.forEach(item=>{
-
-if(
-(item.Mostrar_TV || '').trim().toUpperCase() !== 'SI'
-){
-return;
-}
-
-const productoNombre =
-(item.Producto || '').trim();
-
-const stockRows =
-inventario.filter(i =>
-(i.Producto || '').trim() === productoNombre
-);
-
-const stockTotal =
-stockRows.reduce(
-(a,b)=>a+Number(b.Stock_Actual||0),
-0
-);
-
-const colores = stockRows.map(row => {
-
-const cantidad =
-Number(row.Stock_Actual || 0);
-
-let icono = "🔴";
-
-if(cantidad > 2){
-
-icono = "🟢";
-
-}
-else if(cantidad > 0){
-
-icono = "🟡";
+  render();
+  reiniciarTimer();
 
 }
 
-return {
-
-color:(row.Color || '').trim(),
-icono:icono,
-cantidad:cantidad
-
-};
-
-});
-
-productos.push({
-
-nombre:productoNombre,
-
-categoria:
-(item.Categoria || '').trim(),
-
-precio:
-(item.Precio_Unitario || '').trim(),
-
-imagen:
-BASE_IMG +
-(item.Imagen || '').trim(),
-
-orden:
-Number(item.Orden_TV || 0),
-
-destacado:
-(item.Destacado || '')
-.trim()
-.toUpperCase() === 'SI',
-
-colores,
-
-stock:
-estadoStock(
-stockTotal,
-item.Stock_Minimo
-)
-
-});
-
-});
-
-productos.sort(
-(a,b)=>a.orden-b.orden
-);
-
-const selector =
-document.getElementById(
-'selectorCategoria'
-);
-
-const destacados =
-productos.filter(
-x=>x.destacado
-);
-
-categorias.push({
-nombre:'⭐ DESTACADOS',
-items:destacados
-});
-
-const cats =
-[
-...new Set(
-productos.map(
-p=>p.categoria
-)
-)
-];
-
-cats.forEach(cat=>{
-
-categorias.push({
-
-nombre:cat,
-
-items:
-productos.filter(
-p=>p.categoria===cat
-)
-
-});
-
-const option =
-document.createElement('option');
-
-option.value = cat;
-option.textContent = cat;
-
-selector.appendChild(option);
-
-});
-
-selector.addEventListener(
-'change',
-e=>{
-
-const valor =
-e.target.value;
-
-if(valor==="TODOS"){
-
-categoriaIndex = 0;
-
-}else{
-
-categoriaIndex =
-categorias.findIndex(
-c=>c.nombre===valor
-);
-
-}
-
-render();
-
-}
-);
-
-render();
-
-timer=setInterval(()=>{
-
-if(!pausado){
-
-categoriaIndex++;
-
-if(
-categoriaIndex >= categorias.length
-){
-
-categoriaIndex = 0;
-
-}
-
-render();
-
-}
-
-},15000);
-
-});
+// ===== Render =====
 
 function render(){
 
-const actual =
-categorias[categoriaIndex];
+  const p = paginas[idx];
 
-if(!actual){return;}
+  if(!p){
+    $('titulo').textContent = 'Sin productos para mostrar';
+    $('productos').innerHTML = '';
+    return;
+  }
 
-document
-.getElementById('titulo')
-.innerText =
-actual.nombre;
+  $('titulo').textContent = p.nombre + (p.total > 1 ? ` (${p.pag}/${p.total})` : '');
+  $('selectorCategoria').value = p.key;
 
-const items =
-actual.items.slice(0,4);
+  $('productos').innerHTML = p.items.map(x => {
 
-document
-.getElementById('productos')
-.innerHTML =
+    const src = x.imagen ? BASE_IMG + encodeURIComponent(x.imagen) : PH;
 
-items.map(p=>`
+    return `
+      <div class="card">
+        <img src="${src}" alt="${esc(x.nombre)}" onerror="this.onerror=null;this.src=PH">
+        <div class="info">
+          <div class="nombre">${esc(x.nombre)}</div>
+          <div class="precio">${x.precio}</div>
+          <div class="colores">
+            ${x.colores.map(c => `<span class="color-badge">${c.icono} ${esc(c.color)}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
 
-<div class="card">
-
-<img src="${p.imagen}">
-
-<div class="info">
-
-<div class="nombre">
-${p.nombre}
-</div>
-
-<div class="precio">
-${p.precio}
-</div>
-
-<div class="colores">
-
-${p.colores.map(c =>
-
-`<span class="color-badge">
-${c.icono} ${c.color}
-</span>`
-
-).join('')}
-
-</div>
-
-
-</div>
-
-</div>
-
-`).join('');
+  }).join('');
 
 }
 
-function siguiente(){
+// ===== Navegación =====
 
-categoriaIndex++;
-
-if(categoriaIndex>=categorias.length){
-
-categoriaIndex=0;
-
+function ir(d){
+  if(!paginas.length){ return; }
+  idx = (idx + d + paginas.length) % paginas.length;
+  render();
+  reiniciarTimer();
 }
 
-render();
-
-}
-
-function anterior(){
-
-categoriaIndex--;
-
-if(categoriaIndex<0){
-
-categoriaIndex=
-categorias.length-1;
-
-}
-
-render();
-
+function reiniciarTimer(){
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if(!pausado && paginas.length){
+      idx = (idx + 1) % paginas.length;
+      render();
+    }
+  }, ROTAR_MS);
 }
 
 function togglePausa(){
+  pausado = !pausado;
+  $('btnPausa').innerText = pausado ? '▶' : '⏸';
+}
 
-pausado=!pausado;
+$('selectorCategoria').addEventListener('change', e => {
+  const i = paginas.findIndex(p => p.key === e.target.value);
+  if(i >= 0){ idx = i; render(); reiniciarTimer(); }
+});
 
-document
-.getElementById('btnPausa')
-.innerText =
+// ===== Datos: carga, caché y actualización sin recargar =====
 
-pausado ? '▶' : '⏸';
+function setEstado(txt, offline){
+  const el = $('estado');
+  el.textContent = txt;
+  el.className = offline ? 'offline' : '';
+}
+
+function guardarCache(cat, inv){
+  try{
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ cat:cat, inv:inv, ts:Date.now() }));
+  }catch(e){}
+}
+
+function leerCache(){
+  try{
+    return JSON.parse(localStorage.getItem(CACHE_KEY));
+  }catch(e){
+    return null;
+  }
+}
+
+async function actualizar(){
+
+  try{
+
+    const [cat, inv] = await Promise.all([
+      cargarCSV(CSV_CATALOGO),
+      cargarCSV(CSV_INVENTARIO)
+    ]);
+
+    if(!cat.length || !('Producto' in cat[0])){
+      throw new Error('El CSV del catálogo no tiene el formato esperado');
+    }
+
+    guardarCache(cat, inv);
+    aplicar(cat, inv);
+
+    ultimaOk = new Date();
+    setEstado('Datos al ' + ultimaOk.toLocaleString('es-MX'), false);
+
+    return true;
+
+  }catch(e){
+
+    console.error(e);
+
+    if(!paginas.length){
+
+      const c = leerCache();
+
+      if(c){
+        aplicar(c.cat, c.inv);
+        setEstado('Sin conexión · datos guardados del ' + new Date(c.ts).toLocaleString('es-MX'), true);
+      }else{
+        $('titulo').textContent = 'No se pudo cargar el catálogo. Reintentando...';
+      }
+
+    }else{
+      setEstado('Sin conexión · mostrando datos del ' + (ultimaOk ? ultimaOk.toLocaleString('es-MX') : 'último guardado'), true);
+    }
+
+    return false;
+
+  }
 
 }
 
-document.getElementById(
- 'ultimaActualizacion'
-).textContent =
-'Actualizado: ' +
-new Date().toLocaleString('es-MX');
+async function ciclo(){
+  const ok = await actualizar();
+  setTimeout(ciclo, ok ? REFRESCAR_MS : REINTENTO_MS);
+}
 
-setInterval(() => {
-
-    location.reload();
-
-}, 300000);
-
+ciclo();
 </script>
 
 </body>
