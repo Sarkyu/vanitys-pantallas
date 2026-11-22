@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vanitys Boutique Coapa</title>
+<title>Darvina Home</title>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif;}
@@ -57,7 +57,7 @@ footer{position:relative;}
 
 <header>
   <div>
-    <div class="logo">Vanitys Boutique Coapa</div>
+    <div class="logo">Darvina Home</div>
     <div>Catálogo Digital</div>
     <div id="estado"></div>
   </div>
@@ -148,7 +148,7 @@ function construir(catalogo, inventario){
 
   catalogo.forEach(item => {
 
-    if((item.Mostrar_TV || '').trim().toUpperCase() !== 'SI'){ return; }
+    if(norm(item.Mostrar_TV) !== 'si'){ return; }
 
     const nombre = (item.Producto || '').trim();
     if(!nombre){ return; }
@@ -197,7 +197,7 @@ function construir(catalogo, inventario){
       precio: fmtPrecio(item.Precio_Unitario),
       imagenes: imagenes,
       orden: Number(item.Orden_TV) || 9999,   // sin orden → al final
-      destacado: (item.Destacado || '').trim().toUpperCase() === 'SI',
+      destacado: norm(item.Destacado) === 'si',
       colores: colores
     });
 
