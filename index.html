@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Darvina Home</title>
+<title>Vanitys Boutique Coapa</title>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif;}
@@ -20,7 +20,16 @@ select{background:#f4f4f4;}
 .categoria{height:45px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#c2185b;}
 #productos{padding:12px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;height:calc(100vh - 200px);}
 .card{background:white;display:flex;border-radius:18px;overflow:hidden;box-shadow:0 3px 15px rgba(0,0,0,.12);}
-.card img{width:65%;object-fit:contain;background:white;}
+.foto{position:relative;width:65%;background:white;display:flex;overflow:hidden;}
+.foto img{width:100%;height:100%;min-height:0;object-fit:contain;}
+.flecha{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;padding:0;border-radius:50%;background:rgba(194,24,91,.85);font-size:18px;}
+.flecha.izq{left:8px;}
+.flecha.der{right:8px;}
+.etiqueta{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.65);color:white;padding:4px 12px;border-radius:14px;font-size:16px;font-weight:700;}
+.puntos{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:6px;pointer-events:none;}
+.puntos i{width:9px;height:9px;border-radius:50%;background:#ccc;}
+.puntos i.on{background:#c2185b;}
+.color-badge.activo{background:#c2185b;color:white;}
 .info{padding:20px;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;}
 .nombre{font-size:30px;font-weight:800;color:#111;margin-top:10px;}
 .precio{font-size:54px;font-weight:900;color:#e53935;}
@@ -39,7 +48,7 @@ header{flex-direction:column;align-items:flex-start;gap:10px;height:auto;}
 .top-controls{width:100%;flex-wrap:wrap;}
 .qr{display:none;}
 .card{flex-direction:column;}
-.card img{width:100%;height:320px;}
+.foto{width:100%;height:320px;}
 footer{position:relative;}
 }
 </style>
@@ -48,7 +57,7 @@ footer{position:relative;}
 
 <header>
   <div>
-    <div class="logo">Darvina Home</div>
+    <div class="logo">Vanitys Boutique Coapa</div>
     <div>Catálogo Digital</div>
     <div id="estado"></div>
   </div>
@@ -80,6 +89,7 @@ const POR_PAGINA = 4;
 const ROTAR_MS = 15000;
 const REFRESCAR_MS = 300000;   // 5 min
 const REINTENTO_MS = 30000;    // 30 s si falla
+const IMG_MS = 5000;           // cambio automático de imagen dentro de la tarjeta
 const CACHE_KEY = 'vanitys_cache_v1';
 
 const PH = 'data:image/svg+xml;utf8,' + encodeURIComponent(
@@ -91,6 +101,8 @@ let idx = 0;
 let pausado = false;
 let timer = null;
 let ultimaOk = null;
+let imgTimer = null;
+const imgIdx = new Map();   // producto → imagen actual
 
 const $ = id => document.getElementById(id);
 
@@ -154,23 +166,36 @@ function construir(catalogo, inventario){
       porColor.set(k, c);
     });
 
-    let colores = [...porColor.values()].map(c => ({
-      color: c.color,
-      icono: c.cantidad <= 0 ? '🔴' : (c.cantidad <= minimo ? '🟡' : '🟢')
-    }));
+    const icono = n => n <= 0 ? '🔴' : (n <= minimo ? '🟡' : '🟢');
 
-    // respaldo: si no hay inventario, usa "Colores TV" del catálogo
-    if(!colores.length && item.Colores_TV){
-      colores = String(item.Colores_TV).split(',')
-        .map(s => s.trim()).filter(Boolean)
-        .map(c => ({ color: c, icono: '🔴' }));
+    // "Colores_TV" decide qué colores se muestran; vacío = todos los del inventario
+    const permitidos = String(item.Colores_TV || '')
+      .split(/[,;]/).map(s => s.trim()).filter(Boolean);
+
+    let colores;
+
+    if(permitidos.length){
+      colores = permitidos.map(nombreColor => {
+        const c = porColor.get(norm(nombreColor));
+        return { color: nombreColor, icono: icono(c ? c.cantidad : 0) };
+      });
+    }else{
+      colores = [...porColor.values()].map(c => ({ color: c.color, icono: icono(c.cantidad) }));
     }
+
+    // imágenes: "archivo.jpg, Chocolate:archivo2.jpg, Gris:archivo3.jpg"
+    const imagenes = String(item.Imagen || '')
+      .split(',').map(s => s.trim()).filter(Boolean)
+      .map(s => {
+        const m = /^https?:/i.test(s) ? null : s.match(/^([^:\/]+):(.+)$/);
+        return m ? { color: m[1].trim(), file: m[2].trim() } : { color: '', file: s };
+      });
 
     productos.push({
       nombre: nombre,
       categoria: (item.Categoria || '').trim() || 'Otros',
       precio: fmtPrecio(item.Precio_Unitario),
-      imagen: (item.Imagen || '').trim(),
+      imagenes: imagenes,
       orden: Number(item.Orden_TV) || 9999,   // sin orden → al final
       destacado: (item.Destacado || '').trim().toUpperCase() === 'SI',
       colores: colores
@@ -258,25 +283,112 @@ function render(){
   $('titulo').textContent = p.nombre + (p.total > 1 ? ` (${p.pag}/${p.total})` : '');
   $('selectorCategoria').value = p.key;
 
-  $('productos').innerHTML = p.items.map(x => {
+  $('productos').innerHTML = p.items.map((x, i) => {
 
-    const src = x.imagen ? BASE_IMG + encodeURIComponent(x.imagen) : PH;
+    const multi = x.imagenes.length > 1;
 
     return `
-      <div class="card">
-        <img src="${src}" alt="${esc(x.nombre)}" onerror="this.onerror=null;this.src=PH">
+      <div class="card" data-i="${i}">
+        <div class="foto">
+          <img src="${esc(imgSrc(x))}" alt="${esc(x.nombre)}" onerror="this.onerror=null;this.src=PH">
+          <span class="etiqueta"></span>
+          ${multi ? '<button class="flecha izq" data-d="-1">◀</button><button class="flecha der" data-d="1">▶</button><div class="puntos"></div>' : ''}
+        </div>
         <div class="info">
           <div class="nombre">${esc(x.nombre)}</div>
           <div class="precio">${x.precio}</div>
           <div class="colores">
-            ${x.colores.map(c => `<span class="color-badge">${c.icono} ${esc(c.color)}</span>`).join('')}
+            ${x.colores.map(c => `<span class="color-badge" data-c="${esc(norm(c.color))}">${c.icono} ${esc(c.color)}</span>`).join('')}
           </div>
         </div>
       </div>`;
 
   }).join('');
 
+  p.items.forEach((x, i) => {
+    x.imagenes.forEach(im => { new Image().src = urlImg(im); });   // precarga
+    pintarImg(i);
+  });
+
 }
+
+// ===== Carrusel de imágenes por producto =====
+
+function urlImg(im){
+  return /^https?:/i.test(im.file) ? im.file : BASE_IMG + encodeURIComponent(im.file);
+}
+
+function imgActual(x){
+  const n = imgIdx.get(x.nombre) || 0;
+  return x.imagenes.length ? n % x.imagenes.length : 0;
+}
+
+function imgSrc(x){
+  const im = x.imagenes[imgActual(x)];
+  return im ? urlImg(im) : PH;
+}
+
+function pintarImg(i){
+
+  const p = paginas[idx];
+  const x = p && p.items[i];
+  const card = document.querySelector('.card[data-i="' + i + '"]');
+
+  if(!x || !card){ return; }
+
+  const n = imgActual(x);
+  const im = x.imagenes[n];
+  const src = im ? urlImg(im) : PH;
+  const img = card.querySelector('.foto img');
+
+  if(img.getAttribute('src') !== src){ img.src = src; }
+
+  const et = card.querySelector('.etiqueta');
+  et.textContent = im && im.color ? im.color : '';
+  et.style.display = im && im.color ? '' : 'none';
+
+  const pts = card.querySelector('.puntos');
+  if(pts){
+    pts.innerHTML = x.imagenes.map((_, k) => '<i class="' + (k === n ? 'on' : '') + '"></i>').join('');
+  }
+
+  // resalta el color de la imagen que se está viendo
+  const cc = im && im.color ? norm(im.color) : '';
+  card.querySelectorAll('.color-badge').forEach(b => {
+    b.classList.toggle('activo', !!cc && b.dataset.c === cc);
+  });
+
+}
+
+function cambiarImg(i, d){
+
+  const p = paginas[idx];
+  const x = p && p.items[i];
+
+  if(!x || x.imagenes.length < 2){ return; }
+
+  imgIdx.set(x.nombre, (imgActual(x) + d + x.imagenes.length) % x.imagenes.length);
+  pintarImg(i);
+
+}
+
+function avanzarImagenes(){
+  const p = paginas[idx];
+  if(pausado || !p){ return; }
+  p.items.forEach((x, i) => cambiarImg(i, 1));
+}
+
+function reiniciarImgTimer(){
+  clearInterval(imgTimer);
+  imgTimer = setInterval(avanzarImagenes, IMG_MS);
+}
+
+$('productos').addEventListener('click', e => {
+  const b = e.target.closest('.flecha');
+  if(!b){ return; }
+  cambiarImg(Number(b.closest('.card').dataset.i), Number(b.dataset.d));
+  reiniciarImgTimer();
+});
 
 // ===== Navegación =====
 
@@ -380,6 +492,7 @@ async function ciclo(){
   setTimeout(ciclo, ok ? REFRESCAR_MS : REINTENTO_MS);
 }
 
+reiniciarImgTimer();
 ciclo();
 </script>
 
